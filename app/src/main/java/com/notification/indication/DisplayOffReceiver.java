@@ -12,9 +12,9 @@ public class DisplayOffReceiver extends BroadcastReceiver {
         this.context = context.getApplicationContext();
 		String action = intent.getAction();
         if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-            if (!AppConstants.isServiceRunning(context,NotificationMonitorService.class)) {
-                context.startService(new Intent(context, NotificationMonitorService.class));
-            }
+//            if (!AppConstants.isServiceRunning(context,NotificationMonitorService.class)) {
+//                context.startService(new Intent(context, NotificationMonitorService.class));
+//            }
             NotificationMonitorService.display = true;
         }
 	}

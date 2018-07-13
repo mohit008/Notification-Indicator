@@ -100,8 +100,10 @@ public class NotificationMonitorService extends NotificationListenerService {
         // for dialog generating missed call
         // STATUS_BAR_NOTIFIER - call comming / out going
         // GroupSummary_MissedCall - call missed
-        if (sbn.getId() == 1 && sbn.getNotification().tickerText == null && sbn.getTag().equals("GroupSummary_MissedCall")) {
-            show();
+        if(sbn.getTag()!=null){
+            if (sbn.getId() == 1 && sbn.getNotification().tickerText == null && sbn.getTag().equals("GroupSummary_MissedCall")) {
+                show();
+            }
         }
     }
 
