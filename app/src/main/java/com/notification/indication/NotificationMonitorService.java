@@ -1,17 +1,25 @@
 package com.notification.indication;
 
 import android.app.KeyguardManager;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Display;
+
+import static com.notification.indication.AppConstants.text;
+import static com.notification.indication.AppConstants.title_n;
 
 
 /**
@@ -47,6 +55,17 @@ public class NotificationMonitorService extends NotificationListenerService {
         registerReceiver(displayReceiver, filter);
 
         context = this.getApplicationContext();
+
+        if (Build.VERSION.SDK_INT >= 26) {
+            String channel_id = "notification.x.service";
+            NotificationChannel channel = new NotificationChannel(channel_id, "notification monitoring", NotificationManager.IMPORTANCE_DEFAULT);
+            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+            Notification notification = new NotificationCompat.Builder(this, channel_id)
+                    .setContentTitle(title_n)
+                    .setContentText(text).build();
+            startForeground(963852741, notification);
+        }
+
         super.onCreate();
     }
 

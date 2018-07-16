@@ -3,9 +3,13 @@ package com.notification.indication;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
@@ -22,6 +26,8 @@ import java.util.Locale;
 public class AppConstants {
     static final String NOTIFICATION_RECEIVER = "notification_receiver";
     static String ROOT_PACKAGE = "com.notification.indication";
+    public static final String title_n = "notification";
+    public static final String text = "monitoring x notification show";
 
     //permissions
     static final String[] PERMISSION = {
@@ -200,5 +206,34 @@ public class AppConstants {
             }
         }
         return false;
+    }
+
+    /**
+     * generate notification
+     */
+    public void generateNotification(Activity activity) {
+        NotificationManager mNotificationManager = (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            String channel_id = "notification.x.service";
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channel_id, "notification monitoring", NotificationManager.IMPORTANCE_DEFAULT);
+                channel.setDescription(text);
+                mNotificationManager.createNotificationChannel(channel);
+            }
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(activity.getApplicationContext(), channel_id)
+                    .setSmallIcon(R.mipmap.app_icon)
+                    .setContentTitle(title_n)
+                    .setContentText(text)
+                    .setAutoCancel(true);
+            mNotificationManager.notify((int) System.currentTimeMillis(), mBuilder.build());
+        } else {
+            NotificationCompat.Builder ncomp = new NotificationCompat.Builder(activity);
+            ncomp.setContentTitle(title_n);
+            ncomp.setContentText(text);
+            ncomp.setTicker("Notification Listener Service");
+            ncomp.setSmallIcon(R.mipmap.app_icon);
+            ncomp.setAutoCancel(true);
+            mNotificationManager.notify((int) System.currentTimeMillis(), ncomp.build());
+        }
     }
 }

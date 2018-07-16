@@ -88,7 +88,11 @@ public class NotificationHome extends Activity implements ActivityCompat.OnReque
      */
     public void serviceTask() {
         if (!AppConstants.isServiceRunning(this.getApplicationContext(), NotificationMonitorService.class)) {
-            startService(new Intent(this, NotificationMonitorService.class));
+            if (Build.VERSION.SDK_INT > 25) {
+                startForegroundService(new Intent(this, NotificationMonitorService.class));
+            }else {
+                startService(new Intent(this, NotificationMonitorService.class));
+            }
         }
     }
 
@@ -157,40 +161,12 @@ public class NotificationHome extends Activity implements ActivityCompat.OnReque
 //                }
 //                if(date.getText().toString().matches(".*[0-9]+.*") && input1.matches(".*[$&+,:;=?@#|'<>.-^*()%!]+.*")){
 //                }
-                if(date.getText().toString().contains("-")){
+                String tag = (String) date.getTag();
+                if (tag.equals("num")) {
                     date.setText(appConstants.getTextDate(date));
-                }else{
+                } else {
                     date.setText(appConstants.getNumDate(date));
                 }
-//                // -- generate notification
-//                String tag = (String) date.getTag();
-//                if (tag.equals("num")) {
-//                    date.setText(appConstants.getTextDate(date));
-//                } else {
-//                    date.setText(appConstants.getNumDate(date));
-//                }
-//                NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//                        NotificationChannel channel = new NotificationChannel("default", "YOUR_CHANNEL_NAME", NotificationManager.IMPORTANCE_DEFAULT);
-//                        channel.setDescription("YOUR_NOTIFICATION_CHANNEL_DISCRIPTION");
-//                        mNotificationManager.createNotificationChannel(channel);
-//                    }
-//                    NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext(), "default")
-//                            .setSmallIcon(R.mipmap.ic_launcher)
-//                            .setContentTitle("Notification")
-//                            .setContentText("Showing notification")
-//                            .setAutoCancel(true);
-//                    mNotificationManager.notify((int) System.currentTimeMillis(), mBuilder.build());
-//                } else {
-//                    NotificationCompat.Builder ncomp = new NotificationCompat.Builder(NotificationHome.this);
-//                    ncomp.setContentTitle("Notification");
-//                    ncomp.setContentText("Showing notification");
-//                    ncomp.setTicker("Notification Listener Service Example");
-//                    ncomp.setSmallIcon(R.mipmap.ic_launcher);
-//                    ncomp.setAutoCancel(true);
-//                    mNotificationManager.notify((int) System.currentTimeMillis(), ncomp.build());
-//                }
             }
         });
 
